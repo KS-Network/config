@@ -1,2 +1,5 @@
-# config
-gitops config
+# KS-Network Config
+
+## Scope
+
+- AWS terraform IaC
