@@ -3,25 +3,41 @@ resource "aws_s3_bucket" "fe_bucket" {
   bucket = format("%s-fe-bucket", var.name_prefix)
 }
 
+# S3 Website
+resource "aws_s3_bucket_website_configuration" "fe_bucket_webhost" {
+  bucket = aws_s3_bucket.fe_bucket.bucket
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "index.html"
+  }
+}
+
 ### Bucket ACL setting
 resource "aws_s3_bucket_acl" "fe_bucket_acl" {
   bucket = aws_s3_bucket.fe_bucket.id
-  acl    = "private"
+  acl    = "public-read"
 }
 
-# data "aws_iam_policy_document" "fe_bucket_policy" {
-#   statement {
-#     actions   = ["s3:GetObject"]
-#     resources = ["${aws_s3_bucket.fe_bucket.arn}/*"]
-#
-#     principals {
-#       type        = "AWS"
-#       identifiers = [aws_cloudfront_origin_access_identity.fe_oai.iam_arn]
-#     }
-#   }
-# }
-#
-# resource "aws_s3_bucket_policy" "fe_bucket_policy" {
-#   bucket = aws_s3_bucket.fe_bucket.id
-#   policy = data.aws_iam_policy_document.fe_bucket_policy.json
-# }
+resource "aws_s3_bucket_policy" "fe_bucket_policy" {
+  bucket = aws_s3_bucket.fe_bucket.id
+  policy = data.aws_iam_policy_document.s3_read_all_policy.json
+}
+
+data "aws_iam_policy_document" "s3_read_all_policy" {
+  statement {
+    actions = [
+      "s3:GetObject"
+    ]
+    principals {
+      identifiers = ["*"]
+      type = "AWS"
+    }
+    resources = [
+      "arn:aws:s3:::${format("%s-fe-bucket", var.name_prefix)}/*"
+    ]
+  }
+}
