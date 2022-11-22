@@ -34,7 +34,7 @@ resource "aws_route" "pub_rtb_default" {
   gateway_id             = aws_internet_gateway.igw_main.id
 }
 
-## Subnet - 172.16.1.0
+## Subnet - 172.16.1.0 - API
 resource "aws_subnet" "pub_subnet_1_0" {
   vpc_id     = aws_vpc.vpc_main.id
   cidr_block = "172.16.1.0/24"
@@ -76,11 +76,45 @@ resource "aws_subnet" "pub_subnet_4_0" {
   availability_zone = "ap-northeast-2c"
 
   tags = {
-    Name = format("%s-private-subnet-3-0", var.name_prefix)
+    Name = format("%s-public-subnet-4-0", var.name_prefix)
+  }
+}
+
+resource "aws_route_table_association" "pub_subnet_4_0_rtb_assoc" {
+  subnet_id      = aws_subnet.pub_subnet_4_0.id
+  route_table_id = aws_route_table.pub_rtb.id
+}
+
+# Subnet - 172.16.3.0 - ALB AZ1
+resource "aws_subnet" "pub_subnet_3_0" {
+  vpc_id     = aws_vpc.vpc_main.id
+  cidr_block = "172.16.3.0/24"
+
+  availability_zone = "ap-northeast-2a"
+
+  tags = {
+    Name = format("%s-public-subnet-3-0", var.name_prefix)
   }
 }
 
 resource "aws_route_table_association" "pub_subnet_3_0_rtb_assoc" {
-  subnet_id      = aws_subnet.pub_subnet_4_0.id
+  subnet_id      = aws_subnet.pub_subnet_3_0.id
+  route_table_id = aws_route_table.pub_rtb.id
+}
+
+# Subnet - 172.16.5.0 - ALB AZ2
+resource "aws_subnet" "pub_subnet_5_0" {
+  vpc_id     = aws_vpc.vpc_main.id
+  cidr_block = "172.16.5.0/24"
+
+  availability_zone = "ap-northeast-2c"
+
+  tags = {
+    Name = format("%s-public-subnet-5-0", var.name_prefix)
+  }
+}
+
+resource "aws_route_table_association" "pub_subnet_5_0_rtb_assoc" {
+  subnet_id      = aws_subnet.pub_subnet_5_0.id
   route_table_id = aws_route_table.pub_rtb.id
 }
