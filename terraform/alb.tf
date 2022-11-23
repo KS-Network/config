@@ -116,30 +116,7 @@ resource "aws_alb_listener" "alb_main_listener_main" {
   certificate_arn   = aws_acm_certificate_validation.hz_main_cert_validate.certificate_arn
 
   default_action {
-    type = "redirect"
-
-    redirect {
-      status_code = "HTTP_301"
-      host        = aws_s3_bucket.fe_bucket.bucket_regional_domain_name
-      path        = "/build/index.html"
-      port        = 443
-      protocol    = "HTTPS"
-    }
-  }
-}
-
-resource "aws_alb_listener_rule" "alb_main_listener_main_api" {
-  listener_arn = aws_alb_listener.alb_main_listener_main.arn
-  priority     = 100
-
-  action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.alb_main_tg_api.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/api/*"]
-    }
   }
 }

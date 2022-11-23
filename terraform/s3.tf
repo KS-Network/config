@@ -3,23 +3,10 @@ resource "aws_s3_bucket" "fe_bucket" {
   bucket = format("%s-fe-bucket", var.name_prefix)
 }
 
-# S3 Website
-resource "aws_s3_bucket_website_configuration" "fe_bucket_webhost" {
-  bucket = aws_s3_bucket.fe_bucket.bucket
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "index.html"
-  }
-}
-
 ### Bucket ACL setting
 resource "aws_s3_bucket_acl" "fe_bucket_acl" {
   bucket = aws_s3_bucket.fe_bucket.id
-  acl    = "public-read"
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_policy" "fe_bucket_policy" {
@@ -29,15 +16,12 @@ resource "aws_s3_bucket_policy" "fe_bucket_policy" {
 
 data "aws_iam_policy_document" "s3_read_all_policy" {
   statement {
-    actions = [
-      "s3:GetObject"
-    ]
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.fe_bucket.arn}/*"]
+
     principals {
-      identifiers = ["*"]
       type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.fe_distribution_oai.iam_arn]
     }
-    resources = [
-      "arn:aws:s3:::${format("%s-fe-bucket", var.name_prefix)}/*"
-    ]
   }
 }

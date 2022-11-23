@@ -64,8 +64,8 @@ resource "aws_route53_record" "hz_main_record_alb" {
   type    = "A"
 
   alias {
-    name                   = aws_alb.alb_main.dns_name
-    zone_id                = aws_alb.alb_main.zone_id
+    name                   = aws_cloudfront_distribution.fe_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.fe_distribution.hosted_zone_id
     evaluate_target_health = true
   }
 }
