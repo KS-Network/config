@@ -2,8 +2,8 @@
 #D SG for LB accepts only HTTP and HTTPS connections
 #D And ignore all other in/egresses
 resource "aws_security_group" "sg_alb" {
-  name        = format("%s-sg-alb", var.name_prefix)
-  vpc_id      = aws_vpc.vpc_main.id
+  name   = format("%s-sg-alb", var.name_prefix)
+  vpc_id = aws_vpc.vpc_main.id
 
   tags = {
     Name = format("%s-sg-alb", var.name_prefix)
@@ -116,14 +116,14 @@ resource "aws_alb_listener" "alb_main_listener_main" {
   certificate_arn   = aws_acm_certificate_validation.hz_main_cert_validate.certificate_arn
 
   default_action {
-    type             = "redirect"
+    type = "redirect"
 
     redirect {
-      status_code    = "HTTP_301"
-      host           = aws_s3_bucket.fe_bucket.bucket_regional_domain_name
-      path           = "/build/index.html"
-      port           = 443
-      protocol       = "HTTPS"
+      status_code = "HTTP_301"
+      host        = aws_s3_bucket.fe_bucket.bucket_regional_domain_name
+      path        = "/build/index.html"
+      port        = 443
+      protocol    = "HTTPS"
     }
   }
 }

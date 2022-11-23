@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "s3_read_all_policy" {
     ]
     principals {
       identifiers = ["*"]
-      type = "AWS"
+      type        = "AWS"
     }
     resources = [
       "arn:aws:s3:::${format("%s-fe-bucket", var.name_prefix)}/*"

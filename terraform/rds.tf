@@ -1,7 +1,7 @@
 # SG
 resource "aws_security_group" "sg_db" {
-  name        = format("%s-sg-db", var.name_prefix)
-  vpc_id      = aws_vpc.vpc_main.id
+  name   = format("%s-sg-db", var.name_prefix)
+  vpc_id = aws_vpc.vpc_main.id
 
   tags = {
     Name = format("%s-sg-db", var.name_prefix)
