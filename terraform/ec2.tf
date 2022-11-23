@@ -1,7 +1,7 @@
 # Keypair
 resource "aws_key_pair" "ec2_ssh_pub" {
   key_name   = format("%s-ec2-ssh-pub", var.name_prefix)
-  public_key = file("./ec2-ssh.pub")
+  public_key = file("./id_rsa.pub")
 }
 
 # AMI

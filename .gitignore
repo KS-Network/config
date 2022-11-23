@@ -33,5 +33,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Exclude envs
+# Exclude
 .env
+id_rsa*
