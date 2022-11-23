@@ -97,7 +97,7 @@ resource "aws_cloudfront_distribution" "fe_distribution" {
     target_origin_id = aws_s3_bucket.fe_bucket.id
 
     forwarded_values {
-      query_string = true  # Forward all query_string
+      query_string = true # Forward all query_string
 
       cookies {
         forward = "all" # Forward all cookies

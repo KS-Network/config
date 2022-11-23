@@ -116,7 +116,7 @@ resource "aws_alb_listener" "alb_main_listener_main" {
   certificate_arn   = aws_acm_certificate_validation.hz_main_cert_validate.certificate_arn
 
   default_action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_alb_target_group.alb_main_tg_api.arn
   }
 }
