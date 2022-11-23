@@ -89,18 +89,12 @@ resource "aws_instance" "ec2_api" {
 
   subnet_id = aws_subnet.pub_subnet_1_0.id
   key_name  = format("%s-ec2-ssh-pub", var.name_prefix)
-  # iam_instance_profile = aws_iam_instance_profile.ec2_api_iam_profile.name
 
   tags = {
     Name = format("%s-ec2-api", var.name_prefix)
     Tier = "api-server-layer"
   }
 }
-
-# resource "aws_iam_instance_profile" "ec2_api_iam_profile" {
-#   name = format("%s-ec2-api-iam-profile", var.name_prefix)
-#   role = aws_iam_role.ec2_role.name
-# }
 
 # EIP
 resource "aws_eip" "eip_api" {
