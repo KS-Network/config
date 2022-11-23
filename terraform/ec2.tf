@@ -27,8 +27,8 @@ data "aws_ami" "amazonLinux" {
 
 # SG
 resource "aws_security_group" "sg_api" {
-  name        = format("%s-sg-ec2", var.name_prefix)
-  vpc_id      = aws_vpc.vpc_main.id
+  name   = format("%s-sg-ec2", var.name_prefix)
+  vpc_id = aws_vpc.vpc_main.id
 
   tags = {
     Name = format("%s-sg-ec2", var.name_prefix)
@@ -38,12 +38,12 @@ resource "aws_security_group" "sg_api" {
 ## SG Rules
 ### Ingress
 resource "aws_security_group_rule" "sg_api_rule_ing_http" {
-  type              = "ingress"
-  from_port         = var.apiserver_port
-  to_port           = var.apiserver_port
-  protocol          = "TCP"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.sg_api.id
+  type                     = "ingress"
+  from_port                = var.apiserver_port
+  to_port                  = var.apiserver_port
+  protocol                 = "TCP"
+  source_security_group_id = aws_security_group.sg_alb.id
+  security_group_id        = aws_security_group.sg_api.id
 
   lifecycle {
     create_before_destroy = true
@@ -87,8 +87,8 @@ resource "aws_instance" "ec2_api" {
     aws_security_group.sg_api.id
   ]
 
-  subnet_id            = aws_subnet.pub_subnet_1_0.id
-  key_name             = format("%s-ec2-ssh-pub", var.name_prefix)
+  subnet_id = aws_subnet.pub_subnet_1_0.id
+  key_name  = format("%s-ec2-ssh-pub", var.name_prefix)
   # iam_instance_profile = aws_iam_instance_profile.ec2_api_iam_profile.name
 
   tags = {
